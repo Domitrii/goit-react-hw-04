@@ -4,15 +4,17 @@ import css from './SearchBar.module.css'
 import { useState } from 'react'
 
 function SearchBar({SearchWord}) {
-    const handleSubmit= (value) => {
-         
-        if(!value.query.trim()){
+    const handleSubmit = (value, {resetForm}) => {
+      if(value !== value.query){
+        
+        if(!value.query.trim()) {
             return toast.error('write something pls')
         }
 
         SearchWord(value.query)
-        value.query = ''
+        resetForm()
     }
+  }
 
   return (
     <Formik initialValues={{query: ''}} onSubmit={handleSubmit} >
