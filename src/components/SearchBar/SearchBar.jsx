@@ -1,6 +1,7 @@
 import { Formik, Form, Field } from 'formik'
 import toast from 'react-hot-toast'
 import css from './SearchBar.module.css'
+import { useState } from 'react'
 
 function SearchBar({SearchWord}) {
     const handleSubmit= (value) => {
@@ -8,10 +9,9 @@ function SearchBar({SearchWord}) {
         if(!value.query.trim()){
             return toast.error('write something pls')
         }
+
         SearchWord(value.query)
-        console.log(value.query)
         value.query = ''
-        console.log(value.query)
     }
 
   return (

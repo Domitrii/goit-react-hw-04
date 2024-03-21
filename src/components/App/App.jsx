@@ -33,19 +33,27 @@ function App() {
   };
 
   useEffect(() => {
+    if(!query){
+      return
+    }
+    setLoaderVisible(true)
+
     async function fetchData() {
       try{
         const { results, total_pages } = await ApiService(query, page);
-        setLoaderVisible(true)
-          setBtnLoadMore(total_pages > page)
+
+        if (results.length === 0) {
+          return toast.error("This didn't work.");
+        }
+        
+        setBtnLoadMore(total_pages > page)
           setPhoto((prevPhoto) => {
             return [...prevPhoto, ...results];
           });
-              if(results.length === 0){
-                toast.error('not find')
-              } 
+
         } catch(error){
-          console.log(error)
+          setError(true)
+          toast.error(`Didn't work`)
         } finally {
           setLoaderVisible(false)
         }
@@ -72,8 +80,8 @@ return (
       <Toaster position='top-center' />
        <SearchBar SearchWord={searchPhoto}  />
        {error && <ErrorMessage />}
-       {loaderVisible && <Loader />}
        {photo.length > 0 && <ImageGallery items={photo} onSelect={openModal} />}
+       {loaderVisible && <Loader />}
        {BtnLoadMore && <LoadMoreBtn loadMore={loadMore} />}
        <ImageModal closeModal={closeModal} isOpen={modalIsOpen} photo={selectedPhoto} />
       </>
